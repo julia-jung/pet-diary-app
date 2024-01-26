@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Pets {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  type      String
+  birthDate DateTime
+  image     String?
+  memo      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model VetVisits {
+  id          Int      @id @default(autoincrement())
+  date        DateTime
+  type        String
+  clinic      String
+  description String?
+  price       Int?
+  memo        String?
+  images      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+}
+
+model Schedules {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  date        DateTime
+  createdAt   DateTime
+  updatedAt   DateTime
+}
+
+model Tasks {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  isDone      Boolean
+  createdAt   DateTime
+  updatedAt   DateTime
+}
