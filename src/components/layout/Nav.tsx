@@ -1,39 +1,66 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Box, Divider, Toolbar, Drawer, Button, List } from '@mui/material';
 import {
-  Box,
-  Divider,
-  Toolbar,
-  List,
-  Drawer,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
-import { MoveToInbox as InboxIcon, Mail as MailIcon } from '@mui/icons-material';
+  Pets as PetsIcon,
+  BarChart as BarChartIcon,
+  Vaccines as VaccinesIcon,
+  SetMeal as SetMealIcon,
+  LocalPharmacy as LocalPharmacyIcon,
+  Create as CreateIcon,
+} from '@mui/icons-material';
 
-import { NAV, NavProps } from '@/types/layout';
+import { NAV, NavProps, NavItemProps } from '@/types/layout';
+import NavItem from './NavItem';
+
+const navItems: NavItemProps[] = [
+  {
+    path: '/',
+    text: 'Dashboard',
+    icon: <BarChartIcon />,
+  },
+  {
+    path: '/vet-visits',
+    text: 'Vet Visits',
+    icon: <VaccinesIcon />,
+  },
+  {
+    path: '/foods',
+    text: 'Foods',
+    icon: <SetMealIcon />,
+  },
+  {
+    path: '/medications',
+    text: 'Medications',
+    icon: <LocalPharmacyIcon />,
+  },
+  {
+    path: '/blogs',
+    text: 'Blogs',
+    icon: <CreateIcon />,
+  },
+];
 
 export default function Nav({ openNav, onCloseNav }: NavProps) {
-  const [isClosing, setIsClosing] = useState(false);
-
-  const handleDrawerClose = () => {
-    setIsClosing(true);
-    onCloseNav();
-  };
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    // fetch('/api/pets/2').then((res) => console.log(res.json()));
-  }, []);
+    if (openNav) {
+      onCloseNav();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
+  // useEffect(() => {
+  //   // fetch('/api/pets/2').then((res) => console.log(res.json()));
+  // }, []);
 
   return (
     <Box component="nav" sx={{ width: { sm: NAV.WIDTH }, flexShrink: { sm: 0 } }} aria-label="mailbox folders">
-      {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
       <Drawer
         variant="temporary"
         open={openNav}
-        onTransitionEnd={() => setIsClosing(false)}
-        onClose={handleDrawerClose}
+        onClose={onCloseNav}
         ModalProps={{
           keepMounted: true, // Better open performance on mobile.
         }}
@@ -60,27 +87,16 @@ export default function Nav({ openNav, onCloseNav }: NavProps) {
 
 const drawerContent = (
   <>
-    <Toolbar />
+    <Toolbar>
+      <Button component={RouterLink} to="/" startIcon={<PetsIcon />}>
+        My Pet Diary
+      </Button>
+    </Toolbar>
     <Divider />
+
     <List>
-      {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-        <ListItem key={text} disablePadding>
-          <ListItemButton>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItemButton>
-        </ListItem>
-      ))}
-    </List>
-    <Divider />
-    <List>
-      {['All mail', 'Trash', 'Spam'].map((text, index) => (
-        <ListItem key={text} disablePadding>
-          <ListItemButton>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItemButton>
-        </ListItem>
+      {navItems.map((item) => (
+        <NavItem key={item.path} {...item} />
       ))}
     </List>
   </>
