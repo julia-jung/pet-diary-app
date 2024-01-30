@@ -4,9 +4,15 @@ import prisma from './prisma/client';
 const api = express.Router();
 
 /* Pets */
-// get a pet info
+// get all pets
+api.get('/api/pets', async (req, res) => {
+  const pets = await prisma.pets.findMany();
+  // res.status(500).json({ message: 'Failed to fetch Pets' });
+  res.json(pets);
+});
+
+// get a pet details
 api.get('/api/pets/:id', async (req, res) => {
-  // console.log(req);
   const pet = await prisma.pets.findUnique({
     where: { id: +req.params.id },
   });
@@ -15,9 +21,32 @@ api.get('/api/pets/:id', async (req, res) => {
   }
   res.json(pet);
 });
+
 // create a pet
+api.post('/api/pets', async (req, res) => {
+  const user = await prisma.pets.create({
+    data: { ...req.body },
+  });
+
+  res.json(user);
+});
 // update a pet
+api.put('/api/pets/:id', async (req, res) => {
+  const user = await prisma.pets.update({
+    data: { ...req.body },
+    where: { id: +req.params.id },
+  });
+
+  res.json(user);
+});
 // delete a pet
+api.delete('/api/pets/:id', async (req, res) => {
+  await prisma.pets.delete({
+    where: { id: +req.params.id },
+  });
+
+  res.json(true);
+});
 
 /* Vet Visits */
 // get vet visits list

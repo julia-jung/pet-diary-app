@@ -6,7 +6,8 @@ async function main() {
   const ari = await prisma.pets.create({
     data: {
       name: '아리',
-      type: '코숏 치즈 고양이',
+      type: 'cat',
+      breed: '코숏 치즈',
       birthDate: new Date(),
       image: 'ari.png',
       memo: '아리는 뚠뚜니',
@@ -15,7 +16,8 @@ async function main() {
   const munji = await prisma.pets.create({
     data: {
       name: '먼지',
-      type: '러시안블루 고양이',
+      type: 'cat',
+      breed: '러시안 블루',
       birthDate: new Date(),
       image: 'munji.png',
       memo: '먼지는 너무 귀여워',

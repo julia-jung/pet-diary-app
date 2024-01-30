@@ -5,5 +5,5 @@
 // };
 
 export const NAV = {
-  WIDTH: 240,
+  WIDTH: 260,
 };

@@ -1,45 +1,11 @@
 import { useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
-import { Box, Divider, Toolbar, Drawer, Button, List } from '@mui/material';
-import {
-  Pets as PetsIcon,
-  BarChart as BarChartIcon,
-  Vaccines as VaccinesIcon,
-  SetMeal as SetMealIcon,
-  LocalPharmacy as LocalPharmacyIcon,
-  Create as CreateIcon,
-} from '@mui/icons-material';
+import { Box, Divider, Toolbar, Drawer, Button } from '@mui/material';
+import { Pets as PetsIcon } from '@mui/icons-material';
 
-import { NAV, NavProps, NavItemProps } from '@/types/layout';
-import NavItem from './NavItem';
-
-const navItems: NavItemProps[] = [
-  {
-    path: '/',
-    text: 'Dashboard',
-    icon: <BarChartIcon />,
-  },
-  {
-    path: '/vet-visits',
-    text: 'Vet Visits',
-    icon: <VaccinesIcon />,
-  },
-  {
-    path: '/foods',
-    text: 'Foods',
-    icon: <SetMealIcon />,
-  },
-  {
-    path: '/medications',
-    text: 'Medications',
-    icon: <LocalPharmacyIcon />,
-  },
-  {
-    path: '/blogs',
-    text: 'Blogs',
-    icon: <CreateIcon />,
-  },
-];
+import { NAV, NavProps } from '@/types/layout';
+import NavList from './NavList';
+import PetProfile from './PetProfile';
 
 export default function Nav({ openNav, onCloseNav }: NavProps) {
   const { pathname } = useLocation();
@@ -50,10 +16,6 @@ export default function Nav({ openNav, onCloseNav }: NavProps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
-
-  // useEffect(() => {
-  //   // fetch('/api/pets/2').then((res) => console.log(res.json()));
-  // }, []);
 
   return (
     <Box component="nav" sx={{ width: { sm: NAV.WIDTH }, flexShrink: { sm: 0 } }} aria-label="mailbox folders">
@@ -88,16 +50,23 @@ export default function Nav({ openNav, onCloseNav }: NavProps) {
 const drawerContent = (
   <>
     <Toolbar>
-      <Button component={RouterLink} to="/" startIcon={<PetsIcon />}>
+      <Button
+        component={RouterLink}
+        to="/"
+        startIcon={<PetsIcon />}
+        size="large"
+        sx={{
+          fontSize: 18,
+          fontWeight: 800,
+        }}
+      >
         My Pet Diary
       </Button>
     </Toolbar>
     <Divider />
 
-    <List>
-      {navItems.map((item) => (
-        <NavItem key={item.path} {...item} />
-      ))}
-    </List>
+    <PetProfile />
+
+    <NavList />
   </>
 );

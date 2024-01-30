@@ -1,4 +1,6 @@
-import { RouteObject } from 'react-router-dom';
+import { createBrowserRouter, RouteObject, RouterProvider as ReactRouterProvider } from 'react-router-dom';
+
+import { RootRoute, ErrorRoute } from './routes';
 
 import DashboardView from '@/views/dashboard/DashboardView';
 import PetInfoView from '@/views/pet-info/PetInfoView';
@@ -9,6 +11,7 @@ import MedicationsView from '@/views/medications/MedicationsView';
 import BlogsView from '@/views/blogs/BlogsView';
 import JournalDetailView from '@/views/blogs/journals/JournalDetailView';
 import MemoDetailView from '@/views/blogs/memos/MemoDetailView';
+import ErrorView from '@/views/error/ErrorView';
 
 declare module 'react-router-dom' {
   interface IndexRouteObject {
@@ -31,4 +34,18 @@ export const routes: RouteObject[] = [
   { path: '/blogs', title: '육묘일기 & 메모', subtitle: 'Journals & Memos', element: <BlogsView /> },
   { path: '/journals/:id', title: '육묘일기', subtitle: 'Journal', element: <JournalDetailView /> },
   { path: '/memos/:id', title: '메모', subtitle: 'Memo', element: <MemoDetailView /> },
+  { path: '/error', title: 'Error', element: <ErrorView /> },
 ];
+
+export default function RouterProvider() {
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <RootRoute />,
+      errorElement: <ErrorRoute />,
+      children: routes,
+    },
+  ]);
+
+  return <ReactRouterProvider router={router} />;
+}
