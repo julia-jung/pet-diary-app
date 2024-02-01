@@ -1,17 +1,20 @@
-import { useRouteError } from 'react-router-dom';
-import { Error } from '@/types/common';
+import { useRouteError, useLocation } from 'react-router-dom';
+// import { Error } from '@/types/common';
 
 export default function ErrorRoute() {
-  const error = useRouteError() as Error;
+  const error = useRouteError();
   console.error(error);
+  const { state } = useLocation();
 
   return (
     <div id="error-page">
-      <h1>{error.status}</h1>
       <p>Sorry, an unexpected error has occurred.</p>
-      <p>
-        <i>{error.statusText || error.message}</i>
-      </p>
+      {state && (
+        <>
+          <h4>{state.status}</h4>
+          <div>{state.message || state.statustext}</div>
+        </>
+      )}
     </div>
   );
 }

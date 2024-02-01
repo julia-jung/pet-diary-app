@@ -1,2 +1,11 @@
-export { default as ErrorRoute } from './ErrorRoute';
 export { default as RootRoute } from './RootRoute';
+export { default as ErrorRoute } from './ErrorRoute';
+export { default as BlogsRoute } from './BlogsRoute';
+export { default as DashboardRoute } from './DashboardRoute';
+export { default as FoodsRoute } from './FoodsRoute';
+export { default as JournalRoute } from './JournalRoute';
+export { default as MedicationsRoute } from './MedicationsRoute';
+export { default as MemoRoute } from './MemoRoute';
+export { default as PetInfoRoute } from './PetInfoRoute';
+export { default as VetVisitRoute } from './VetVisitRoute';
+export { default as VetVisitsRoute } from './VetVisitsRoute';
