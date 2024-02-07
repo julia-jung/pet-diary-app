@@ -1,6 +1,5 @@
 import { CssBaseline } from '@mui/material';
 import { createTheme, ThemeProvider as MUIThemeProvider, ThemeOptions } from '@mui/material/styles';
-import { lime, indigo } from '@mui/material/colors';
 
 declare module '@mui/material/styles' {
   interface Theme {
@@ -15,15 +14,39 @@ declare module '@mui/material/styles' {
 
 export const themeOptions: ThemeOptions = {
   palette: {
-    primary: indigo,
-    secondary: lime,
+    primary: {
+      main: '#0d2039',
+    },
+    secondary: {
+      main: '#d9cbb6',
+    },
     background: {
-      paper: '#F9FAFB',
-      default: '#F9FAFB',
+      paper: '#F4F6F8',
+      default: '#DFE3E8',
     },
   },
   typography: {
     fontFamily: 'Public Sans, sans-serif',
+  },
+  components: {
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#FFF',
+          borderRadius: 8,
+        },
+      },
+    },
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+      },
+    },
+    MuiButtonGroup: {
+      defaultProps: {
+        disableElevation: true,
+      },
+    },
   },
   // palette: palette as PaletteOptions,
   // typography: typography as TypographyVariantsOptions,

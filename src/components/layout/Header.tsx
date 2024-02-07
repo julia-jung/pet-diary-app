@@ -32,6 +32,7 @@ export default function Header({ onOpenNav }: HeaderProps) {
       sx={{
         width: { sm: `calc(100% - ${NAV.WIDTH}px)` },
         ml: { sm: `${NAV.WIDTH}px` },
+        boxShadow: 0,
       }}
     >
       <Toolbar>

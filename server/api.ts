@@ -1,7 +1,15 @@
 import express from 'express';
 import prisma from './prisma/client';
+import multer from 'multer';
 
 const api = express.Router();
+const storage = multer.diskStorage({
+  destination: 'public/assets/images/',
+  filename: function (req, file, cb) {
+    cb(null, req.params.id + '_' + Date.now() + '.' + file.originalname.split('.').slice(-1));
+  },
+});
+const upload = multer({ storage });
 
 /* Pets */
 // get all pets
@@ -24,12 +32,27 @@ api.get('/api/pets/:id', async (req, res) => {
 
 // create a pet
 api.post('/api/pets', async (req, res) => {
-  const user = await prisma.pets.create({
+  const pet = await prisma.pets.create({
     data: { ...req.body },
   });
 
-  res.json(user);
+  res.json(pet);
 });
+
+// Upload an image for pet with an id
+api.post('/api/pets/:id/image', upload.single('file'), async (req, res) => {
+  const image = req.file;
+
+  console.log(image);
+  if (image) {
+    const pet = await prisma.pets.update({
+      data: { image: image.filename },
+      where: { id: +req.params.id },
+    });
+    res.json(pet.image);
+  }
+});
+
 // update a pet
 api.put('/api/pets/:id', async (req, res) => {
   const user = await prisma.pets.update({

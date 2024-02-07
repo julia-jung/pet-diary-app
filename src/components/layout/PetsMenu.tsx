@@ -45,7 +45,7 @@ export default function PetsMenu({ pets, selectedId, onSelect }: PetsMenuProps) 
         {pets.map((pet) => (
           <MenuItem key={pet.id} selected={pet.id === selectedId} onClick={() => handleSelect(pet.id)}>
             <ListItemIcon>
-              <Avatar src={`/assets/images/avatars/${pet.type}.jpg`} alt="petTypeAvatar" />
+              <Avatar src={`/assets/images/${pet.image ?? pet.type + '.jpg'}`} alt="petTypeAvatar" />
             </ListItemIcon>
             <ListItemText>{pet.name}</ListItemText>
             <Typography variant="body2" color="text.secondary">

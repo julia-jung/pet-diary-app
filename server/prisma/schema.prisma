@@ -16,6 +16,9 @@ model Pets {
   type      String
   breed     String?
   birthDate DateTime
+  weight    Int?
+  allergies String?
+  diseases  String?
   image     String?
   memo      String?
   createdAt DateTime @default(now())
