@@ -3,7 +3,10 @@ import { useEffect } from 'react';
 import { ButtonBase, ButtonGroup, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Delete as DeleteIcon, CloudUpload as CloudUploadIcon } from '@mui/icons-material';
-import { useAppSelector, useMutate } from '@/hooks';
+
+import ConfirmDialog from './ConfirmDialog';
+
+import { useAppSelector, useConfirmDialog, useMutate } from '@/hooks';
 import { selectPetId } from '@/store/slices';
 
 interface ImageButtonProps {
@@ -14,6 +17,7 @@ interface ImageButtonProps {
 export default function ImageButton({ url, onChange }: ImageButtonProps) {
   const petId = useAppSelector(selectPetId);
   const { mutateData, data, error, isSaving } = useMutate(`/api/pets/${petId}/image`);
+  const { open: openDialog, title, content, startConfirming, finishConfirming } = useConfirmDialog();
 
   const handleFileUpload = async (e: any) => {
     if (isSaving) return;
@@ -25,24 +29,35 @@ export default function ImageButton({ url, onChange }: ImageButtonProps) {
     }
   };
 
+  const handleClickDelete = () => {
+    if (isSaving) return;
+    startConfirming('이미지를 삭제하시겠습니까?');
+  };
+
+  const handleConfirmDelete = async () => {
+    finishConfirming();
+    await mutateData('delete');
+  };
+
+  const handleCancelDelete = () => {
+    finishConfirming();
+  };
+
   useEffect(() => {
     if (data && !error) {
       console.log(data);
-      onChange(data);
+      onChange(typeof data === 'string' ? data : undefined);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error, data]);
-
-  const handleClickDelete = async () => {
-    if (isSaving) return;
-    // TODO: show alert
-    await mutateData('delete');
-    onChange();
-  };
+  }, [data, error]);
 
   return (
     <ImageButtonBase focusRipple key={url}>
-      <ImageBackground className="MuiImageBackground-root" style={{ backgroundImage: `url(${url})` }} />
+      {url ? (
+        <ImageBackground className="MuiImageBackground-root" style={{ backgroundImage: `url(${url})` }} />
+      ) : (
+        <ImageBackdrop className="MuiImageBackdrop-root" />
+      )}
       <ButtonGroup variant="text" color="inherit">
         <Button
           component="label"
@@ -55,26 +70,34 @@ export default function ImageButton({ url, onChange }: ImageButtonProps) {
             mr: 1,
           }}
         >
-          Upload file
+          {url ? 'Change' : 'Upload'}
           <VisuallyHiddenInput type="file" onChange={handleFileUpload} />
           <ButtonUnderMark className="MuiImageMarked-root" />
         </Button>
-        {/* TODO: show delete button only when image exist */}
-        <Button
-          component="label"
-          startIcon={<DeleteIcon />}
-          onClick={handleClickDelete}
-          sx={{
-            position: 'relative',
-            p: 2,
-            pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
-            color: 'common.white',
-          }}
-        >
-          Delete file
-          <ButtonUnderMark className="MuiImageMarked-root" />
-        </Button>
+        {url && (
+          <Button
+            component="label"
+            startIcon={<DeleteIcon />}
+            onClick={handleClickDelete}
+            sx={{
+              position: 'relative',
+              p: 2,
+              pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
+              color: 'common.white',
+            }}
+          >
+            Delete
+            <ButtonUnderMark className="MuiImageMarked-root" />
+          </Button>
+        )}
       </ButtonGroup>
+      <ConfirmDialog
+        open={openDialog}
+        title={title}
+        content={content}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </ImageButtonBase>
   );
 }
@@ -89,6 +112,9 @@ const ImageButtonBase = styled(ButtonBase)(({ theme }) => ({
     zIndex: 1,
     '& .MuiImageBackground-root': {
       opacity: 0.7,
+    },
+    '& .MuiImageBackdrop-root': {
+      opacity: 0.4,
     },
     '& .MuiImageMarked-root': {
       opacity: 0,
@@ -107,6 +133,17 @@ const ImageBackground = styled('span')(({ theme }) => ({
   bottom: 0,
   backgroundSize: 'cover',
   backgroundPosition: 'center 40%',
+  transition: theme.transitions.create('opacity'),
+}));
+
+const ImageBackdrop = styled('span')(({ theme }) => ({
+  position: 'absolute',
+  left: 0,
+  right: 0,
+  top: 0,
+  bottom: 0,
+  backgroundColor: theme.palette.common.black,
+  opacity: 0.3,
   transition: theme.transitions.create('opacity'),
 }));
 

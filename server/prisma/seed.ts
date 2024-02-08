@@ -9,7 +9,6 @@ async function main() {
       type: 'cat',
       breed: '코숏 치즈',
       birthDate: new Date(),
-      image: 'ari.png',
       memo: '아리는 뚠뚜니',
     },
   });
@@ -19,7 +18,6 @@ async function main() {
       type: 'cat',
       breed: '러시안 블루',
       birthDate: new Date(),
-      image: 'munji.png',
       memo: '먼지는 너무 귀여워',
     },
   });

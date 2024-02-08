@@ -1,6 +1,8 @@
 import express from 'express';
 import prisma from './prisma/client';
 import multer from 'multer';
+import { unlinkSync } from 'fs';
+import { resolve, join } from 'path';
 
 const api = express.Router();
 const storage = multer.diskStorage({
@@ -50,6 +52,24 @@ api.post('/api/pets/:id/image', upload.single('file'), async (req, res) => {
       where: { id: +req.params.id },
     });
     res.json(pet.image);
+  }
+});
+
+api.delete('/api/pets/:id/image', async (req, res) => {
+  const pet = await prisma.pets.findUnique({
+    where: { id: +req.params.id },
+  });
+  if (!pet) {
+    res.status(404).json({ message: `No Pet found with an ID of ${req.params.id}` });
+  } else if (pet.image) {
+    const path = resolve(process.cwd(), 'public/assets/images');
+    unlinkSync(join(path, pet.image));
+
+    await prisma.pets.update({
+      data: { image: null },
+      where: { id: +req.params.id },
+    });
+    res.json(true);
   }
 });
 

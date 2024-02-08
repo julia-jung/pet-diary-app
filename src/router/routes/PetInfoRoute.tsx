@@ -7,16 +7,15 @@ import { Stack, Card, Typography, Button, Divider } from '@mui/material';
 
 import { PetInfoForm } from '@/components/pet-info';
 import { Pet } from '@/types/pet';
-import { useAppSelector, useFetch } from '@/hooks';
-import { selectPetId } from '@/store/slices';
+import { useAppDispatch, useAppSelector, useFetch } from '@/hooks';
+import { changePet, selectPetId } from '@/store/slices';
 
 export default function PetInfoRoute() {
   const petId = useAppSelector(selectPetId);
+  const dispatch = useAppDispatch();
   console.log('Selected Pet ID: ', petId);
-  // useEffect(() => {}, [petId]);
 
   let { id } = useParams();
-  // const shouldReload = id ===
 
   const { data: pet, error, isFetching } = useFetch(`/api/pets/${id}`);
 
@@ -33,8 +32,9 @@ export default function PetInfoRoute() {
   //   return res.data;
   // });
 
-  const updatePetInfo = (pet: Pet) => {
+  const handlePetInfoSave = (pet: Pet) => {
     console.log(pet);
+    dispatch(changePet(pet));
   };
 
   const handleClickDelete = () => {
@@ -71,7 +71,7 @@ export default function PetInfoRoute() {
 
         <Divider sx={{ my: 3 }} />
 
-        <PetInfoForm key={pet?.id} pet={{ ...pet }} onSave={updatePetInfo} />
+        <PetInfoForm key={pet?.id} pet={{ ...pet }} onSave={handlePetInfoSave} />
       </Card>
     </Stack>
   );

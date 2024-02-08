@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 import { Box, TextField, MenuItem, InputAdornment, Button, Stack } from '@mui/material';
 import { Pet, PetInfoFormProps } from '@/types/pet';
@@ -12,6 +12,14 @@ export default function PetInfoForm({ pet, onSave }: PetInfoFormProps) {
       type: '',
     },
   );
+
+  const imageUrl = petInfo.image ? `/assets/images/${petInfo.image}` : undefined;
+
+  const handleImageChange = useCallback((image?: string) => {
+    setPetInfo({ ...petInfo, image });
+    onSave({ ...petInfo, image });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleClickSave = () => {
     // validate form
@@ -31,7 +39,7 @@ export default function PetInfoForm({ pet, onSave }: PetInfoFormProps) {
       }}
     >
       <Stack sx={{ gridRow: 'span 4' }}>
-        <ImageButton url={`/assets/images/${petInfo.image}`} onChange={(image) => setPetInfo({ ...petInfo, image })} />
+        <ImageButton url={imageUrl} onChange={handleImageChange} />
       </Stack>
       {/* {petInfo.id === 0 && <TextField id="pet-name" label="Name" value={petInfo.name} variant="standard" />} */}
       <TextField
