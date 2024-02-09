@@ -1,30 +1,21 @@
 import { useEffect } from 'react';
 import { Link as RouterLink, Navigate } from 'react-router-dom';
-// import useSWR from 'swr';
-// import axios from 'axios';
 
 import { Box, Avatar, Typography, ButtonGroup, Button } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import PetsMenu from './PetsMenu';
+
 import { useAppDispatch, useAppSelector, useFetch } from '@/hooks';
 import { Pet } from '@/types/pet';
-import { changePet, initPet } from '@/store/slices';
+import { changePet, initPet } from '@/store';
 
 export default function PetProfile() {
   const pet = useAppSelector((state) => state.pet);
-  const { data: pets, error, isFetching } = useFetch('/api/pets');
-  // const {
-  //   data: pets,
-  //   error,
-  //   isLoading: isFetching,
-  // } = useSWR('/api/pets', async (url) => {
-  //   console.log('##### fetching data using SWR for: ', url);
-  //   const res = await axios.get(url);
-  //   return res.data;
-  // });
   const dispatch = useAppDispatch();
+
+  const { data: pets, error, isFetching } = useFetch('/api/pets');
 
   useEffect(() => {
     if (pets && pets.length > 0) {

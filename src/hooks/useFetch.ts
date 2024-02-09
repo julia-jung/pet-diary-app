@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import axios, { AxiosError } from 'axios';
-import { Error } from '@/types/common';
+import type { Error } from '@/types/common';
 
 export function useFetch(url: string, params?: Record<string, any>) {
   const [data, setData] = useState<any | null>(null);
@@ -37,6 +37,8 @@ export function useFetch(url: string, params?: Record<string, any>) {
       const { data } = await axios.get(url, { params: searchParams });
 
       setData(data);
+      finishFetch();
+      return data;
     } catch (err) {
       const res = (err as AxiosError).response;
       const message = (err as AxiosError).message ?? res?.data;
@@ -45,13 +47,17 @@ export function useFetch(url: string, params?: Record<string, any>) {
         ...res,
         message,
       });
+      finishFetch();
+      throw new Error(message);
     }
-
-    finishFetch();
   }, [params, url]);
 
   useEffect(() => {
-    fetchData();
+    try {
+      fetchData();
+    } catch (err) {
+      console.log(err);
+    }
   }, [fetchData]);
 
   return { data, error, isFetching, fetchData };

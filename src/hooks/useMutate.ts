@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import axios, { AxiosError } from 'axios';
-import { Error } from '@/types/common';
+import type { Error } from '@/types/common';
 
 export function useMutate(url: string) {
   const [data, setData] = useState<any | null>(null);
@@ -19,12 +19,15 @@ export function useMutate(url: string) {
 
   const mutateData = useCallback(
     async (method: 'post' | 'put' | 'delete', input?: object) => {
+      console.log('***** mutating data for: ', url, '(', method, ')');
       startMutate();
 
       try {
         const { data } = await axios({ method, url, data: input });
 
         setData(data);
+        finishMutate();
+        return data;
       } catch (err) {
         const res = (err as AxiosError).response;
         const message = (err as AxiosError).message ?? res?.data;
@@ -33,9 +36,9 @@ export function useMutate(url: string) {
           ...res,
           message,
         });
+        finishMutate();
+        throw new Error(message);
       }
-
-      finishMutate();
     },
     [url],
   );

@@ -1,13 +1,11 @@
-import { useEffect } from 'react';
-
 import { ButtonBase, ButtonGroup, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Delete as DeleteIcon, CloudUpload as CloudUploadIcon } from '@mui/icons-material';
 
 import ConfirmDialog from './ConfirmDialog';
 
-import { useAppSelector, useConfirmDialog, useMutate } from '@/hooks';
-import { selectPetId } from '@/store/slices';
+import { useAppSelector, useConfirmDialog, useMutate, useSnackbar } from '@/hooks';
+import { selectPetId } from '@/store';
 
 interface ImageButtonProps {
   url?: string;
@@ -16,8 +14,9 @@ interface ImageButtonProps {
 
 export default function ImageButton({ url, onChange }: ImageButtonProps) {
   const petId = useAppSelector(selectPetId);
-  const { mutateData, data, error, isSaving } = useMutate(`/api/pets/${petId}/image`);
+  const { mutateData, isSaving } = useMutate(`/api/pets/${petId}/image`);
   const { open: openDialog, title, content, startConfirming, finishConfirming } = useConfirmDialog();
+  const { setSnackbar } = useSnackbar();
 
   const handleFileUpload = async (e: any) => {
     if (isSaving) return;
@@ -25,7 +24,20 @@ export default function ImageButton({ url, onChange }: ImageButtonProps) {
     if (file) {
       const formData = new FormData();
       formData.append('file', file);
-      await mutateData('post', formData);
+      try {
+        const data = await mutateData('post', formData);
+        onChange(data);
+        setSnackbar({
+          type: 'success',
+          message: '업로드 되었습니다.',
+        });
+      } catch (err) {
+        console.log(err);
+        setSnackbar({
+          type: 'error',
+          message: `업로드 실패: ${err}`,
+        });
+      }
     }
   };
 
@@ -36,20 +48,25 @@ export default function ImageButton({ url, onChange }: ImageButtonProps) {
 
   const handleConfirmDelete = async () => {
     finishConfirming();
-    await mutateData('delete');
+    try {
+      await mutateData('delete');
+      onChange();
+      setSnackbar({
+        type: 'success',
+        message: '삭제 되었습니다.',
+      });
+    } catch (err) {
+      console.log(err);
+      setSnackbar({
+        type: 'error',
+        message: `삭제 실패: ${err}`,
+      });
+    }
   };
 
   const handleCancelDelete = () => {
     finishConfirming();
   };
-
-  useEffect(() => {
-    if (data && !error) {
-      console.log(data);
-      onChange(typeof data === 'string' ? data : undefined);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, error]);
 
   return (
     <ImageButtonBase focusRipple key={url}>
@@ -62,6 +79,7 @@ export default function ImageButton({ url, onChange }: ImageButtonProps) {
         <Button
           component="label"
           startIcon={<CloudUploadIcon />}
+          disabled={isSaving}
           sx={{
             position: 'relative',
             p: 2,
@@ -78,6 +96,7 @@ export default function ImageButton({ url, onChange }: ImageButtonProps) {
           <Button
             component="label"
             startIcon={<DeleteIcon />}
+            disabled={isSaving}
             onClick={handleClickDelete}
             sx={{
               position: 'relative',

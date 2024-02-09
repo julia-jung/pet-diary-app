@@ -62,7 +62,7 @@ export default function PetInfoForm({ pet, onSave }: PetInfoFormProps) {
       <TextField
         id="pet-breed"
         label="Breed"
-        value={petInfo.breed}
+        value={petInfo.breed ?? ''}
         onChange={(e) => setPetInfo({ ...petInfo, breed: e.target.value })}
         variant="standard"
       />
@@ -80,7 +80,7 @@ export default function PetInfoForm({ pet, onSave }: PetInfoFormProps) {
       <TextField
         id="pet-weight"
         label="weight"
-        value={petInfo.weight}
+        value={petInfo.weight ?? 0}
         onChange={(e) => setPetInfo({ ...petInfo, weight: Number(e.target.value) })}
         type="number"
         InputProps={{
@@ -98,14 +98,14 @@ export default function PetInfoForm({ pet, onSave }: PetInfoFormProps) {
       <TextField
         id="pet-breed"
         label="Allergy"
-        value={petInfo.allergies}
+        value={petInfo.allergies ?? ''}
         onChange={(e) => setPetInfo({ ...petInfo, allergies: e.target.value })}
         variant="standard"
       />
       <TextField
         id="pet-breed"
         label="Disease"
-        value={petInfo.diseases}
+        value={petInfo.diseases ?? ''}
         onChange={(e) => setPetInfo({ ...petInfo, diseases: e.target.value })}
         variant="standard"
       />
@@ -113,7 +113,7 @@ export default function PetInfoForm({ pet, onSave }: PetInfoFormProps) {
       <TextField
         id="pet-memo"
         label="Memo"
-        value={petInfo.memo}
+        value={petInfo.memo ?? ''}
         onChange={(e) => setPetInfo({ ...petInfo, memo: e.target.value })}
         rows={4}
         multiline

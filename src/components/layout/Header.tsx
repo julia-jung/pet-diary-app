@@ -9,7 +9,7 @@ import {
   Notifications as NotificationsIcon,
 } from '@mui/icons-material';
 
-import { routes } from '@/router';
+import { routes } from '@/routes';
 import { NAV, HeaderProps } from '@/types/layout';
 
 export default function Header({ onOpenNav }: HeaderProps) {

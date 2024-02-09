@@ -1,2 +1,10 @@
-export * from './StoreProvider';
-export { default as StoreProvider } from './StoreProvider';
+import { configureStore } from '@reduxjs/toolkit';
+import petReducer from './petSlice';
+
+export const store = configureStore({
+  reducer: {
+    pet: petReducer,
+  },
+});
+
+export * from './petSlice';

@@ -1,18 +1,16 @@
-import { createBrowserRouter, RouteObject, RouterProvider as ReactRouterProvider } from 'react-router-dom';
+import { RouteObject } from 'react-router-dom';
 
-import {
-  RootRoute,
-  ErrorRoute,
-  BlogsRoute,
-  DashboardRoute,
-  FoodsRoute,
-  JournalRoute,
-  MedicationsRoute,
-  MemoRoute,
-  PetInfoRoute,
-  VetVisitRoute,
-  VetVisitsRoute,
-} from './routes';
+import BlogsRoute from './BlogsRoute';
+import DashboardRoute from './DashboardRoute';
+import ErrorRoute from './ErrorRoute';
+import FoodsRoute from './FoodsRoute';
+import JournalRoute from './JournalRoute';
+import MedicationsRoute from './MedicationsRoute';
+import MemoRoute from './MemoRoute';
+import PetInfoRoute from './PetInfoRoute';
+import RootRoute from './RootRoute';
+import VetVisitRoute from './VetVisitRoute';
+import VetVisitsRoute from './VetVisitsRoute';
 
 declare module 'react-router-dom' {
   interface IndexRouteObject {
@@ -25,7 +23,7 @@ declare module 'react-router-dom' {
   }
 }
 
-export const routes: RouteObject[] = [
+export const routeChildren: RouteObject[] = [
   { path: '/', index: true, title: '대쉬보드', subtitle: 'Dashboard', element: <DashboardRoute /> },
   { path: '/pet-info/:id', title: '펫 정보', subtitle: 'Pet Info', element: <PetInfoRoute /> },
   { path: '/vet-visits', title: '병원 방문 이력', subtitle: 'Vet Visits', element: <VetVisitsRoute /> },
@@ -38,15 +36,11 @@ export const routes: RouteObject[] = [
   { path: '/error', title: 'Error', element: <ErrorRoute /> },
 ];
 
-export default function RouterProvider() {
-  const router = createBrowserRouter([
-    {
-      path: '/',
-      element: <RootRoute />,
-      errorElement: <ErrorRoute />,
-      children: routes,
-    },
-  ]);
-
-  return <ReactRouterProvider router={router} />;
-}
+export const routes: RouteObject[] = [
+  {
+    path: '/',
+    element: <RootRoute />,
+    errorElement: <ErrorRoute />,
+    children: routeChildren,
+  },
+];
