@@ -2,16 +2,11 @@ export interface Pet {
   id: number;
   name: string;
   type: string;
-  breed?: string;
-  birthDate?: Date;
-  weight?: number;
-  allergies?: string;
-  diseases?: string;
-  image?: string;
-  memo?: string;
-}
-
-export interface PetInfoFormProps {
-  pet: Pet;
-  onSave: (pet: Pet) => void;
+  breed?: string | null;
+  birthDate: string;
+  weight?: number | null;
+  allergies?: string | null;
+  diseases?: string | null;
+  image?: string | null;
+  memo?: string | null;
 }

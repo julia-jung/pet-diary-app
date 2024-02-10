@@ -2,7 +2,13 @@ import { useState } from 'react';
 import { Button, Menu, MenuItem, ListItemIcon, ListItemText, Avatar, Typography } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
-import { PetsMenuProps } from '@/types/layout';
+import { Pet } from '@/types/pet';
+
+interface PetsMenuProps {
+  pets: Pet[];
+  selectedId: number;
+  onSelect: (id: number) => void;
+}
 
 export default function PetsMenu({ pets, selectedId, onSelect }: PetsMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

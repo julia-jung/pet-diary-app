@@ -6,6 +6,7 @@ const initialState: Pet = {
   id: 0,
   name: '',
   type: '',
+  birthDate: '',
 };
 
 const petSlice = createSlice({

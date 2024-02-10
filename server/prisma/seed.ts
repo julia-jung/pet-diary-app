@@ -8,7 +8,7 @@ async function main() {
       name: '아리',
       type: 'cat',
       breed: '코숏 치즈',
-      birthDate: new Date(),
+      birthDate: '2014-11-15',
       memo: '아리는 뚠뚜니',
     },
   });
@@ -17,7 +17,7 @@ async function main() {
       name: '먼지',
       type: 'cat',
       breed: '러시안 블루',
-      birthDate: new Date(),
+      birthDate: '2014-07-15',
       memo: '먼지는 너무 귀여워',
     },
   });
@@ -25,7 +25,7 @@ async function main() {
 
   const sampleVetVisit = await prisma.vetVisits.create({
     data: {
-      date: new Date(),
+      date: '2023-12-26',
       type: 'CHECKUP',
       clinic: '하온 동물의료센터 정자',
       description: '먼지 상태확인 및 먼지랑 아리 건강검진차 방문',

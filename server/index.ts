@@ -1,6 +1,9 @@
 import express from 'express';
-import api from './api';
+import { petsRoute } from './routes';
 import prisma from './prisma/client';
+// import dayjs from 'dayjs';
+// import utc from 'dayjs/plugin/utc';
+// import timezone from 'dayjs/plugin/timezone';
 
 async function main() {
   const app = express();
@@ -12,12 +15,16 @@ async function main() {
     next();
   });
 
-  app.use(api);
+  app.use('/api/pets', petsRoute);
 
   const PORT = 8000;
   app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
   });
+
+  // dayjs.extend(utc);
+  // dayjs.extend(timezone);
+  // dayjs.tz.setDefault('Asia/Seoul');
 }
 
 main()

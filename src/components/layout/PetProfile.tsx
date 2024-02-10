@@ -17,6 +17,8 @@ export default function PetProfile() {
 
   const { data: pets, error, isFetching } = useFetch('/api/pets');
 
+  // TODO: refetch or update pets when pet info has changed
+
   useEffect(() => {
     if (pets && pets.length > 0) {
       dispatch(initPet(pets));

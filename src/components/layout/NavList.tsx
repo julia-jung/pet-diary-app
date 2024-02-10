@@ -8,37 +8,41 @@ import {
   Create as CreateIcon,
 } from '@mui/icons-material';
 
-import { NavItemProps } from '@/types/layout';
-
-const navItems: NavItemProps[] = [
-  {
-    path: '/',
-    text: 'Dashboard',
-    icon: <BarChartIcon />,
-  },
-  {
-    path: '/vet-visits',
-    text: 'Vet Visits',
-    icon: <VaccinesIcon />,
-  },
-  {
-    path: '/foods',
-    text: 'Foods',
-    icon: <SetMealIcon />,
-  },
-  {
-    path: '/medications',
-    text: 'Medications',
-    icon: <LocalPharmacyIcon />,
-  },
-  {
-    path: '/blogs',
-    text: 'Blogs',
-    icon: <CreateIcon />,
-  },
-];
+interface NavItemProps {
+  path: string;
+  text: string;
+  icon: React.ReactElement;
+}
 
 export default function NavList() {
+  const navItems: NavItemProps[] = [
+    {
+      path: '/',
+      text: 'Dashboard',
+      icon: <BarChartIcon />,
+    },
+    {
+      path: '/vet-visits',
+      text: 'Vet Visits',
+      icon: <VaccinesIcon />,
+    },
+    {
+      path: '/foods',
+      text: 'Foods',
+      icon: <SetMealIcon />,
+    },
+    {
+      path: '/medications',
+      text: 'Medications',
+      icon: <LocalPharmacyIcon />,
+    },
+    {
+      path: '/blogs',
+      text: 'Blogs',
+      icon: <CreateIcon />,
+    },
+  ];
+
   return (
     <List>
       {navItems.map((item) => (

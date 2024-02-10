@@ -15,7 +15,7 @@ model Pets {
   name      String   @unique
   type      String
   breed     String?
-  birthDate DateTime
+  birthDate String
   weight    Int?
   allergies String?
   diseases  String?
@@ -27,7 +27,7 @@ model Pets {
 
 model VetVisits {
   id          Int      @id @default(autoincrement())
-  date        DateTime
+  date        String
   type        String
   clinic      String
   description String?
@@ -42,7 +42,7 @@ model Schedules {
   id          Int      @id @default(autoincrement())
   title       String
   description String?
-  date        DateTime
+  date        String
   createdAt   DateTime
   updatedAt   DateTime
 }

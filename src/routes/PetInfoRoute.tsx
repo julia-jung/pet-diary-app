@@ -5,24 +5,28 @@ import { Stack, Card, Typography, Button, Divider } from '@mui/material';
 
 import { PetInfoForm } from '@/components/pet-info';
 import { Pet } from '@/types/pet';
-import { useAppDispatch, useAppSelector, useFetch } from '@/hooks';
+import { useAppDispatch, useAppSelector, useFetch, useMutate } from '@/hooks';
 import { changePet, selectPetId } from '@/store';
 
 export default function PetInfoRoute() {
-  const petId = useAppSelector(selectPetId);
+  // const petId = useAppSelector(selectPetId);
   const dispatch = useAppDispatch();
-  console.log('Selected Pet ID: ', petId);
+  // console.log('Selected Pet ID: ', petId);
 
   let { id } = useParams();
 
-  const { data: pet, error, isFetching } = useFetch(`/api/pets/${id}`);
+  const { data: pet, error, isFetching, fetchData } = useFetch(`/api/pets/${id}`);
+  const { mutateData, isSaving } = useMutate(`/api/pets/${id}`);
 
   const handlePetInfoSave = (pet: Pet) => {
     console.log(pet);
-    dispatch(changePet(pet));
+    // TODO: call update pet
+    // TODO: either fetch pet list again or save pet list in petSlice and update for changed one
+    // dispatch(changePet(pet));
   };
 
   const handleClickDelete = () => {
+    // TODO: implement
     // 1. show alert
     // 2. if pick yes, call delete API
     // 3. then show success/error message
@@ -56,7 +60,7 @@ export default function PetInfoRoute() {
 
         <Divider sx={{ my: 3 }} />
 
-        <PetInfoForm key={pet?.id} pet={{ ...pet }} onSave={handlePetInfoSave} />
+        <PetInfoForm key={pet?.id} pet={{ ...pet }} isSaving={isSaving} onSave={handlePetInfoSave} />
       </Card>
     </Stack>
   );

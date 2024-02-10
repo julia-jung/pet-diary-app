@@ -1,29 +1,62 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
+import dayjs, { Dayjs } from 'dayjs';
 
 import { Box, TextField, MenuItem, InputAdornment, Button, Stack } from '@mui/material';
-import { Pet, PetInfoFormProps } from '@/types/pet';
+import { DateField } from '@mui/x-date-pickers';
+
+import { Pet } from '@/types/pet';
 import { ImageButton } from '../common';
 
-export default function PetInfoForm({ pet, onSave }: PetInfoFormProps) {
-  const [petInfo, setPetInfo] = useState<Pet>(
-    pet ?? {
-      id: 0,
-      name: '',
-      type: '',
-    },
-  );
+interface PetInfoFormProps {
+  pet?: Pet;
+  onSave: (pet: Pet) => void;
+  isSaving: boolean;
+}
 
-  const imageUrl = petInfo.image ? `/assets/images/${petInfo.image}` : undefined;
+export default function PetInfoForm({ pet, onSave, isSaving }: PetInfoFormProps) {
+  const [image, setImage] = useState(pet?.image);
+  const imageUrl = image ? `/assets/images/${image}` : undefined;
 
-  const handleImageChange = useCallback((image?: string) => {
-    setPetInfo({ ...petInfo, image });
-    onSave({ ...petInfo, image });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const [type, setType] = useState(pet?.type ?? '');
+  const isTypeValid = type === 'cat' || type === 'dog';
+  const [breed, setBreed] = useState(pet?.breed ?? '');
+  const [birthDate, setBirthDate] = useState<Dayjs | null>(dayjs(pet?.birthDate));
+  const isBirthDateValid = !!birthDate && birthDate.isBefore(dayjs());
+  const [weight, setWeight] = useState(pet?.weight?.toString() ?? '');
+  const isWeightValid = weight === '' || !!Number(weight);
+  const [allergies, setAllergies] = useState(pet?.allergies ?? '');
+  const [diseases, setDiseases] = useState(pet?.diseases ?? '');
+  const [memo, setMemo] = useState(pet?.memo ?? '');
 
-  const handleClickSave = () => {
-    // validate form
-    onSave(petInfo);
+  const isValid: boolean = isTypeValid && isBirthDateValid && isWeightValid;
+
+  const changedPet: Pet = {
+    id: pet?.id ?? 0,
+    name: pet?.name ?? '',
+    type: type,
+    breed: breed || null,
+    birthDate: birthDate?.format('YYYY-MM-DD') ?? dayjs().format('YYYY-MM-DD'),
+    weight: weight ? Number(weight) : null,
+    allergies: allergies || null,
+    diseases: diseases || null,
+    image: image || null,
+    memo: memo || null,
+  };
+
+  const hasChanged: boolean =
+    !pet ||
+    pet.type !== changedPet.type ||
+    pet.breed !== changedPet.breed ||
+    pet.birthDate !== changedPet.birthDate ||
+    pet.weight !== changedPet.weight ||
+    pet.allergies !== changedPet.allergies ||
+    pet.diseases !== changedPet.diseases ||
+    pet.memo !== changedPet.memo;
+  const canSave: boolean = !isSaving && isValid && hasChanged;
+
+  const handleImageChange = (image?: string) => {
+    setImage(image);
+    onSave({ ...changedPet, image });
   };
 
   return (
@@ -41,15 +74,15 @@ export default function PetInfoForm({ pet, onSave }: PetInfoFormProps) {
       <Stack sx={{ gridRow: 'span 4' }}>
         <ImageButton url={imageUrl} onChange={handleImageChange} />
       </Stack>
-      {/* {petInfo.id === 0 && <TextField id="pet-name" label="Name" value={petInfo.name} variant="standard" />} */}
+
       <TextField
         id="pet-type"
-        label="Type"
-        value={petInfo.type}
-        onChange={(e) => setPetInfo({ ...petInfo, type: e.target.value })}
+        label="타입"
+        value={type}
+        variant="standard"
         select
         required
-        variant="standard"
+        onChange={(e) => setType(e.target.value)}
       >
         <MenuItem key="cat" value="cat">
           고양이
@@ -61,27 +94,29 @@ export default function PetInfoForm({ pet, onSave }: PetInfoFormProps) {
 
       <TextField
         id="pet-breed"
-        label="Breed"
-        value={petInfo.breed ?? ''}
-        onChange={(e) => setPetInfo({ ...petInfo, breed: e.target.value })}
+        label="품종"
+        value={breed}
+        helperText="e.g. 말티즈, 러시안블루"
         variant="standard"
+        onChange={(e) => setBreed(e.target.value)}
       />
 
-      {/* change this to date picker */}
-      <TextField
-        id="pet-birthDate"
-        label="BirthDate"
-        value={petInfo.birthDate}
-        onChange={(e) => setPetInfo({ ...petInfo, birthDate: new Date() })}
+      <DateField
+        id="pet-birthdate"
+        label="생일"
+        value={birthDate}
+        format="YYYY-MM-DD"
+        helperText="YYYY-MM-DD"
         variant="standard"
         margin="normal"
+        required
+        onChange={(newValue) => setBirthDate(newValue)}
       />
 
       <TextField
         id="pet-weight"
-        label="weight"
-        value={petInfo.weight ?? 0}
-        onChange={(e) => setPetInfo({ ...petInfo, weight: Number(e.target.value) })}
+        label="몸무게"
+        value={weight}
         type="number"
         InputProps={{
           endAdornment: <InputAdornment position="start">kg</InputAdornment>,
@@ -91,37 +126,47 @@ export default function PetInfoForm({ pet, onSave }: PetInfoFormProps) {
         }}
         variant="standard"
         margin="normal"
-        // error
-        helperText=" "
+        error={!isWeightValid}
+        onChange={(e) => setWeight(e.target.value)}
       />
 
       <TextField
         id="pet-breed"
-        label="Allergy"
-        value={petInfo.allergies ?? ''}
-        onChange={(e) => setPetInfo({ ...petInfo, allergies: e.target.value })}
+        label="알러지"
+        value={allergies}
+        placeholder="알러지가 있다면 간단히 적어주세요"
+        helperText="e.g. 식이 알러지(닭고기)"
+        onChange={(e) => setAllergies(e.target.value)}
         variant="standard"
       />
       <TextField
         id="pet-breed"
-        label="Disease"
-        value={petInfo.diseases ?? ''}
-        onChange={(e) => setPetInfo({ ...petInfo, diseases: e.target.value })}
+        label="질병"
+        value={diseases}
+        placeholder="질병이 있다면 간단히 적어주세요"
+        helperText="e.g. 치아흡수성병변"
         variant="standard"
+        onChange={(e) => setDiseases(e.target.value)}
       />
 
       <TextField
         id="pet-memo"
-        label="Memo"
-        value={petInfo.memo ?? ''}
-        onChange={(e) => setPetInfo({ ...petInfo, memo: e.target.value })}
+        label="메모"
+        value={memo}
+        placeholder="추가 정보를 메모로 남겨보세요"
         rows={4}
         multiline
         variant="standard"
+        onChange={(e) => setMemo(e.target.value)}
         sx={{ gridColumn: [null, null, 'span 2'] }}
       />
 
-      <Button variant="contained" onClick={handleClickSave} sx={{ gridColumn: [null, null, 'span 2'] }}>
+      <Button
+        variant="contained"
+        disabled={!canSave}
+        onClick={() => onSave(changedPet)}
+        sx={{ gridColumn: [null, null, 'span 2'] }}
+      >
         저장
       </Button>
     </Box>

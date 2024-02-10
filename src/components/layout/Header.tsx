@@ -10,7 +10,11 @@ import {
 } from '@mui/icons-material';
 
 import { routes } from '@/routes';
-import { NAV, HeaderProps } from '@/types/layout';
+import { NAV_WIDTH } from '@/types';
+
+interface HeaderProps {
+  onOpenNav: () => void;
+}
 
 export default function Header({ onOpenNav }: HeaderProps) {
   const { pathname } = useLocation();
@@ -30,8 +34,8 @@ export default function Header({ onOpenNav }: HeaderProps) {
     <AppBar
       position="static"
       sx={{
-        width: { sm: `calc(100% - ${NAV.WIDTH}px)` },
-        ml: { sm: `${NAV.WIDTH}px` },
+        width: { sm: `calc(100% - ${NAV_WIDTH}px)` },
+        ml: { sm: `${NAV_WIDTH}px` },
         boxShadow: 0,
       }}
     >
