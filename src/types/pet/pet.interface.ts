@@ -9,4 +9,6 @@ export interface Pet {
   diseases?: string | null;
   image?: string | null;
   memo?: string | null;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

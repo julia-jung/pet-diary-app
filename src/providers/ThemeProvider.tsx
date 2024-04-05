@@ -3,7 +3,7 @@ import { createTheme, ThemeProvider as MUIThemeProvider } from '@mui/material/st
 
 import { themeOptions } from '@/theme';
 
-import { ComponentProps } from '@/types/common';
+import { ComponentProps } from '@/types';
 
 export default function ThemeProvider({ children }: ComponentProps) {
   const theme = createTheme(themeOptions);

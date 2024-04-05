@@ -3,13 +3,12 @@ import { useParams } from 'react-router-dom';
 
 import { Stack, Card, Typography, Button, Divider } from '@mui/material';
 
-import { PetInfoForm } from '@/components/pet-info';
-import { Pet } from '@/types/pet';
+import { PetInfoForm } from '@/components';
+import { Pet } from '@/types';
 import { useAppDispatch, useAppSelector, useFetch, useMutate } from '@/hooks';
-import { changePet, selectPetId } from '@/store';
+import { changePet } from '@/store';
 
 export default function PetInfoRoute() {
-  // const petId = useAppSelector(selectPetId);
   const dispatch = useAppDispatch();
   // console.log('Selected Pet ID: ', petId);
 
@@ -46,16 +45,9 @@ export default function PetInfoRoute() {
           <Typography variant="h4" flexGrow="1">
             {pet?.name ?? '이름을 입력해주세요'}
           </Typography>
-
-          <Stack direction="row" spacing={2}>
-            <Button variant="contained" color="secondary">
-              + 신규 추가
-            </Button>
-
-            <Button color="error" variant="outlined" onClick={handleClickDelete}>
-              삭제
-            </Button>
-          </Stack>
+          <Button color="error" variant="outlined" onClick={handleClickDelete}>
+            삭제
+          </Button>
         </Stack>
 
         <Divider sx={{ my: 3 }} />

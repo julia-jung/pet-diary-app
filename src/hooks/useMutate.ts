@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import axios, { AxiosError } from 'axios';
-import type { Error } from '@/types/common';
+import type { Error } from '@/types';
 
 export function useMutate(url: string) {
   const [data, setData] = useState<any | null>(null);

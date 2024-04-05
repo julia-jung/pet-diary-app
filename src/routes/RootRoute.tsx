@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 
 import { Box } from '@mui/material';
 
-import { Header, Nav } from '@/components/layout';
+import { Header, Nav } from '@/components';
 import { NAV_WIDTH } from '@/types';
 
 export default function RootRoute() {

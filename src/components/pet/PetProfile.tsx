@@ -1,8 +1,88 @@
-import { useState } from 'react';
-import { Button, Menu, MenuItem, ListItemIcon, ListItemText, Avatar, Typography } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Link as RouterLink, Navigate } from 'react-router-dom';
+
+import {
+  Box,
+  Avatar,
+  Typography,
+  ButtonGroup,
+  Button,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
-import { Pet } from '@/types/pet';
+
+import { useAppDispatch, useAppSelector, useFetch } from '@/hooks';
+import { changePet, initPet, selectedPet } from '@/store';
+import { Pet } from '@/types';
+
+export default function PetProfile() {
+  const pet = useAppSelector(selectedPet);
+  // const dispatch = useAppDispatch();
+
+  // const handlePetChange = (id: number) => {
+  //   const pet = pets.find((p: Pet) => p.id === id);
+  //   if (pet) {
+  //     dispatch(changePet(pet));
+  //   }
+  // };
+
+  // if (isFetching) {
+  //   return (
+  //     <LoadingButton
+  //       loading
+  //       loadingIndicator="Loading…"
+  //       sx={{ m: 2, p: 2, bgcolor: (theme) => alpha(theme.palette.primary.light, 0.3) }}
+  //     >
+  //       Fetch data
+  //     </LoadingButton>
+  //   );
+  // }
+
+  // if (error) {
+  //   console.log(error);
+  //   return <Navigate to="/error" state={error} />;
+  // }
+
+  if (!pet) {
+    return <>You have no pet registered..!</>;
+  }
+
+  return (
+    <>
+      {pet && (
+        <ButtonGroup
+          variant="contained"
+          color="inherit"
+          aria-label="split button"
+          sx={{
+            my: 2,
+            mx: 'auto',
+          }}
+        >
+          <Button
+            component={RouterLink}
+            to={`/pet-info/${pet.id}`}
+            sx={{ p: 2, bgcolor: (theme) => alpha(theme.palette.primary.light, 0.3) }}
+          >
+            <Avatar src={`/assets/images/${pet.image ?? pet.type + '.jpg'}`} alt="petTypeAvatar" />
+
+            <Box sx={{ ml: 2 }}>
+              <Typography variant="subtitle2">{pet.name}</Typography>
+              <Typography variant="body2" color="text.secondary">
+                {pet.breed ?? ''} {pet.type}
+              </Typography>
+            </Box>
+          </Button>
+          {/* {pets && pets.length > 1 && <PetsMenu pets={pets} selectedId={pet.id} onSelect={handlePetChange} />} */}
+        </ButtonGroup>
+      )}
+    </>
+  );
+}
 
 interface PetsMenuProps {
   pets: Pet[];
@@ -10,7 +90,7 @@ interface PetsMenuProps {
   onSelect: (id: number) => void;
 }
 
-export default function PetsMenu({ pets, selectedId, onSelect }: PetsMenuProps) {
+function PetsMenu({ pets, selectedId, onSelect }: PetsMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
 

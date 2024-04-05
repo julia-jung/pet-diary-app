@@ -4,7 +4,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { Box, TextField, MenuItem, InputAdornment, Button, Stack } from '@mui/material';
 import { DateField } from '@mui/x-date-pickers';
 
-import { Pet } from '@/types/pet';
+import { Pet } from '@/types';
 import { ImageButton } from '../common';
 
 interface PetInfoFormProps {

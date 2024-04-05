@@ -46,6 +46,14 @@ export const themeOptions: ThemeOptions = {
         disableElevation: true,
       },
     },
+    MuiListSubheader: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          ...theme.typography.overline,
+          borderBottom: `1px dashed ${theme.palette.grey[400]}`,
+        }),
+      },
+    },
   },
   // palette: palette as PaletteOptions,
   // typography: typography as TypographyVariantsOptions,

@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import axios, { AxiosError } from 'axios';
-import type { Error } from '@/types/common';
+import type { Error } from '@/types';
 
 export function useFetch(url: string, params?: Record<string, any>) {
   const [data, setData] = useState<any | null>(null);

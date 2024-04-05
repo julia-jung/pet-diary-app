@@ -5,7 +5,6 @@ import { Delete as DeleteIcon, CloudUpload as CloudUploadIcon } from '@mui/icons
 import ConfirmDialog from './ConfirmDialog';
 
 import { useAppSelector, useConfirmDialog, useMutate, useSnackbar } from '@/hooks';
-import { selectPetId } from '@/store';
 
 interface ImageButtonProps {
   url?: string;
@@ -13,7 +12,7 @@ interface ImageButtonProps {
 }
 
 export default function ImageButton({ url, onChange }: ImageButtonProps) {
-  const petId = useAppSelector(selectPetId);
+  const petId = useAppSelector((state) => state.pets.selectedId);
   const { mutateData, isSaving } = useMutate(`/api/pets/${petId}/image`);
   const { open: openDialog, title, content, startConfirming, finishConfirming } = useConfirmDialog();
   const { setSnackbar } = useSnackbar();

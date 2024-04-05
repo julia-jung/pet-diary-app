@@ -3,10 +3,10 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { Box, Divider, Toolbar, Drawer, Button } from '@mui/material';
 import { Pets as PetsIcon } from '@mui/icons-material';
 
-import { NAV_WIDTH } from '@/types';
 import NavList from './NavList';
-import PetProfile from './PetProfile';
+import { PetProfile } from '../pet';
 
+import { NAV_WIDTH } from '@/types';
 interface NavProps {
   openNav: boolean;
   onCloseNav: () => void;

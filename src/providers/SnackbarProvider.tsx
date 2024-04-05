@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Snackbar, Alert } from '@mui/material';
 
 import { SnackbarContext } from '@/hooks';
-import type { ComponentProps, SnackbarOptions } from '@/types/common';
+import type { ComponentProps, SnackbarOptions } from '@/types';
 
 export default function SnackbarProvider({ children }: ComponentProps) {
   const [snackbar, setSnackbar] = useState<SnackbarOptions>({ message: '' });

@@ -1,6 +1,6 @@
 import { useContext, createContext } from 'react';
 
-import { SnackbarOptions } from '@/types/common';
+import { SnackbarOptions } from '@/types';
 
 type SnackbarContextType = {
   setSnackbar: React.Dispatch<React.SetStateAction<SnackbarOptions>>;
