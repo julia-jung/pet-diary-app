@@ -19,13 +19,19 @@ const petsSlice = createSlice({
       const selectedId = Number(localStorage.getItem('pet_id') ?? pets[0].id);
 
       state = Object.assign(state, { pets, selectedId });
-      console.log(state.pets, state.selectedId);
       localStorage.setItem('pet_id', String(state.selectedId));
     },
-    changePet: (state, action: PayloadAction<number>) => {
-      // state = Object.assign(state, { ...action.payload });
-      state.selectedId = action.payload;
+    changePet: (state, { payload: id }: PayloadAction<number>) => {
+      state = Object.assign(state, { ...state, selectedId: id });
       localStorage.setItem('pet_id', String(state.selectedId));
+    },
+    updatePet: (state, { payload: pet }: PayloadAction<Pet>) => {
+      const pets = state.pets;
+      const targetPetIndex = pets.findIndex((p) => p.id === pet.id);
+      if (targetPetIndex > 0) {
+        pets[targetPetIndex] = pet;
+        state = Object.assign(state, { ...state, pets });
+      }
     },
     // resetPet: (state) => {
     //   state = Object.assign(state, { ...initialState });
@@ -35,5 +41,5 @@ const petsSlice = createSlice({
 });
 
 export const selectedPet = (state: RootState) => state.pets.pets.find((p) => p.id === state.pets.selectedId);
-export const { initPet, changePet } = petsSlice.actions;
+export const { initPet, changePet, updatePet } = petsSlice.actions;
 export default petsSlice.reducer;

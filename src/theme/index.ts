@@ -14,13 +14,22 @@ declare module '@mui/material/styles' {
 export const themeOptions: ThemeOptions = {
   palette: {
     primary: {
+      light: '#E1F1FF',
       main: '#0d2039',
+      dark: '#3D4C68',
     },
     secondary: {
-      main: '#d9cbb6',
+      light: '#DAF7F4',
+      main: '#00C6BC',
+      dark: '#2E928C',
+      // light: '#FFEECB',
+      // main: '#d9cbb6',
+      // main: '#D9A21B',
+      // dark: '#877455',
     },
     background: {
       paper: '#F4F6F8',
+      // paper: '#F4F6F8',
       default: '#DFE3E8',
     },
   },

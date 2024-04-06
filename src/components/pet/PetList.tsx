@@ -1,28 +1,17 @@
 import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import dayjs from 'dayjs';
 
-import {
-  MenuItem,
-  List,
-  ListSubheader,
-  ListItemAvatar,
-  ListItemText,
-  Avatar,
-  Divider,
-  Typography,
-} from '@mui/material';
+import { List, ListItem, ListSubheader, Divider } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { AccessTime as AccessTimeIcon } from '@mui/icons-material';
 
-import { useAppDispatch, useAppSelector, useFetch } from '@/hooks';
-import { changePet, initPet, selectedPet } from '@/store';
+import PetListItem from './PetListItem';
+
+import { useAppDispatch, useFetch } from '@/hooks';
+import { initPet } from '@/store';
 import { Pet } from '@/types';
-import { petTypeLabel } from '@/utils';
 
 interface PetListProps {
-  // pets: Pet[];
   onSelect: (id: number) => void;
 }
 
@@ -31,7 +20,6 @@ export default function PetList({ onSelect }: PetListProps) {
   const { data: pets, error, isFetching } = useFetch('/api/pets');
 
   useEffect(() => {
-    console.log(pets);
     if (pets && pets.length > 0) {
       dispatch(initPet(pets));
     }
@@ -42,19 +30,23 @@ export default function PetList({ onSelect }: PetListProps) {
 
   if (isFetching) {
     return (
-      <LoadingButton
-        loading
-        loadingIndicator="Loading…"
-        sx={{ m: 2, p: 2, bgcolor: (theme) => alpha(theme.palette.primary.light, 0.3) }}
-      >
-        Fetch data
-      </LoadingButton>
+      <ListItem>
+        <LoadingButton
+          loading
+          loadingIndicator="Loading…"
+          sx={{ m: 2, p: 2, bgcolor: (theme) => alpha(theme.palette.primary.light, 0.3) }}
+        >
+          펫 정보 불러오는 중...
+        </LoadingButton>
+      </ListItem>
     );
   }
 
   if (error) {
     console.log(error);
-    return <Navigate to="/error" state={error} />;
+    return <ListItem>Failed to fetch pet list..!</ListItem>;
+  } else if (!pets?.length) {
+    return <ListItem>You have no pet registered..!</ListItem>;
   }
 
   return (
@@ -69,7 +61,6 @@ export default function PetList({ onSelect }: PetListProps) {
           }
         >
           {cats.map((pet: Pet) => (
-            // <NotificationItem key={notification.id} notification={notification} />
             <PetListItem key={pet.id} pet={pet} onSelect={() => onSelect(pet.id)} />
           ))}
         </List>
@@ -90,44 +81,5 @@ export default function PetList({ onSelect }: PetListProps) {
         </List>
       )}
     </>
-  );
-}
-
-interface PetListItemProps {
-  pet: Pet;
-  onSelect: () => void;
-}
-
-function PetListItem({ pet, onSelect }: PetListItemProps) {
-  return (
-    <MenuItem onClick={onSelect} sx={{ pt: 2 }}>
-      <ListItemAvatar sx={{ mr: 1 }}>
-        <Avatar src={`/assets/images/${pet.image ?? pet.type + '.jpg'}`} alt="petTypeAvatar" />
-      </ListItemAvatar>
-      <ListItemText
-        primary={
-          <Typography variant="subtitle2">
-            {pet.name}
-            <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
-              &nbsp; {pet.breed ?? ''} {petTypeLabel(pet.type)}
-            </Typography>
-          </Typography>
-        }
-        secondary={
-          <Typography
-            variant="caption"
-            sx={{
-              mt: 0.5,
-              display: 'flex',
-              alignItems: 'center',
-              color: 'text.disabled',
-            }}
-          >
-            <AccessTimeIcon sx={{ fontSize: 13, mr: 0.5 }} />
-            Last updated at: {dayjs(pet.updatedAt).format('YYYY-MM-DD')}
-          </Typography>
-        }
-      />
-    </MenuItem>
   );
 }

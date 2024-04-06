@@ -6,11 +6,10 @@ import { Stack, Card, Typography, Button, Divider } from '@mui/material';
 import { PetInfoForm } from '@/components';
 import { Pet } from '@/types';
 import { useAppDispatch, useAppSelector, useFetch, useMutate } from '@/hooks';
-import { changePet } from '@/store';
+import { updatePet } from '@/store';
 
 export default function PetInfoRoute() {
   const dispatch = useAppDispatch();
-  // console.log('Selected Pet ID: ', petId);
 
   let { id } = useParams();
 
@@ -19,6 +18,7 @@ export default function PetInfoRoute() {
 
   const handlePetInfoSave = (pet: Pet) => {
     console.log(pet);
+    dispatch(updatePet(pet));
     // TODO: call update pet
     // TODO: either fetch pet list again or save pet list in petSlice and update for changed one
     // dispatch(changePet(pet));
