@@ -72,12 +72,12 @@ export default function PetInfoForm({ pet, onSave, isSaving }: PetInfoFormProps)
       }}
     >
       <Stack sx={{ gridRow: 'span 4' }}>
-        <ImageButton url={imageUrl} onChange={handleImageChange} />
+        <ImageButton url={imageUrl} path={pet ? `/api/pets/${pet.id}/image` : ''} onChange={handleImageChange} />
       </Stack>
 
       <TextField
         id="pet-type"
-        label="타입"
+        label="Type"
         value={type}
         variant="standard"
         select
@@ -85,25 +85,25 @@ export default function PetInfoForm({ pet, onSave, isSaving }: PetInfoFormProps)
         onChange={(e) => setType(e.target.value)}
       >
         <MenuItem key="cat" value="cat">
-          고양이
+          Cat
         </MenuItem>
         <MenuItem key="dog" value="dog">
-          강아지
+          Dog
         </MenuItem>
       </TextField>
 
       <TextField
         id="pet-breed"
-        label="품종"
+        label="Breed"
         value={breed}
-        helperText="e.g. 말티즈, 러시안블루"
+        helperText="e.g. Russian Blue, Border Collie"
         variant="standard"
         onChange={(e) => setBreed(e.target.value)}
       />
 
       <DateField
         id="pet-birthdate"
-        label="생일"
+        label="BirthDate"
         value={birthDate}
         format="YYYY-MM-DD"
         helperText="YYYY-MM-DD"
@@ -115,7 +115,7 @@ export default function PetInfoForm({ pet, onSave, isSaving }: PetInfoFormProps)
 
       <TextField
         id="pet-weight"
-        label="몸무게"
+        label="Weight"
         value={weight}
         type="number"
         InputProps={{
@@ -131,20 +131,20 @@ export default function PetInfoForm({ pet, onSave, isSaving }: PetInfoFormProps)
       />
 
       <TextField
-        id="pet-breed"
-        label="알러지"
+        id="pet-allergies"
+        label="Allergic to"
         value={allergies}
-        placeholder="알러지가 있다면 간단히 적어주세요"
-        helperText="e.g. 식이 알러지(닭고기)"
+        placeholder="Is your pet allergic to anything?"
+        helperText="e.g. Chicken, Duck"
         onChange={(e) => setAllergies(e.target.value)}
         variant="standard"
       />
       <TextField
-        id="pet-breed"
-        label="질병"
+        id="pet-diseases"
+        label="Diseases"
         value={diseases}
-        placeholder="질병이 있다면 간단히 적어주세요"
-        helperText="e.g. 치아흡수성병변"
+        placeholder="Does your pet have any health problem?"
+        helperText="e.g. FORL, Renal"
         variant="standard"
         onChange={(e) => setDiseases(e.target.value)}
       />
@@ -153,7 +153,7 @@ export default function PetInfoForm({ pet, onSave, isSaving }: PetInfoFormProps)
         id="pet-memo"
         label="메모"
         value={memo}
-        placeholder="추가 정보를 메모로 남겨보세요"
+        placeholder="Leave memo about your pet"
         rows={4}
         multiline
         variant="standard"

@@ -4,16 +4,16 @@ import { Delete as DeleteIcon, CloudUpload as CloudUploadIcon } from '@mui/icons
 
 import ConfirmDialog from './ConfirmDialog';
 
-import { useAppSelector, useConfirmDialog, useMutate, useSnackbar } from '@/hooks';
+import { useConfirmDialog, useMutate, useSnackbar } from '@/hooks';
 
 interface ImageButtonProps {
   url?: string;
+  path: string;
   onChange: (image?: string) => void;
 }
 
-export default function ImageButton({ url, onChange }: ImageButtonProps) {
-  const petId = useAppSelector((state) => state.pets.selectedId);
-  const { mutateData, isSaving } = useMutate(`/api/pets/${petId}/image`);
+export default function ImageButton({ url, path, onChange }: ImageButtonProps) {
+  const { mutateData, isSaving } = useMutate(path);
   const { open: openDialog, title, content, startConfirming, finishConfirming } = useConfirmDialog();
   const { setSnackbar } = useSnackbar();
 

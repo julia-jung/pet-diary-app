@@ -7,7 +7,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 import PetListItem from './PetListItem';
 
-import { useAppDispatch, useFetch } from '@/hooks';
+import { useAppDispatch, useAppSelector, useFetch } from '@/hooks';
 import { initPet } from '@/store';
 import { Pet } from '@/types';
 
@@ -17,13 +17,14 @@ interface PetListProps {
 
 export default function PetList({ onSelect }: PetListProps) {
   const dispatch = useAppDispatch();
-  const { data: pets, error, isFetching } = useFetch('/api/pets');
+  const pets = useAppSelector((state) => state.pets.pets);
+  const { data, error, isFetching } = useFetch('/api/pets');
 
   useEffect(() => {
-    if (pets && pets.length > 0) {
-      dispatch(initPet(pets));
+    if (data && data.length > 0) {
+      dispatch(initPet(data));
     }
-  }, [dispatch, pets]);
+  }, [dispatch, data]);
 
   const cats = pets?.filter((pet: Pet) => pet.type === 'cat') ?? [];
   const dogs = pets?.filter((pet: Pet) => pet.type === 'dog') ?? [];

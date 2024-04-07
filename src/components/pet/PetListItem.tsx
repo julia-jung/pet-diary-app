@@ -36,6 +36,7 @@ export default function PetListItem({ pet, onSelect }: PetListItemProps) {
   const handleClickSelect = () => {
     dispatch(changePet(pet.id));
     onSelect();
+    navigate(`/`);
   };
 
   return (
@@ -69,13 +70,13 @@ export default function PetListItem({ pet, onSelect }: PetListItemProps) {
         // }
       />
       <ListItemSecondaryAction>
-        <IconButton size="small" aria-label="pet-select" onClick={handleClickEdit}>
+        <IconButton size="small" aria-label="navigate to pet info page" onClick={handleClickEdit}>
           <BorderColorIcon />
         </IconButton>
         <IconButton
           size="small"
           color={isSelectedPet ? 'primary' : 'default'}
-          aria-label="comment"
+          aria-label="select the pet"
           onClick={handleClickSelect}
         >
           <CheckCircleOutlinedIcon />
