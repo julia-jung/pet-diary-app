@@ -8,14 +8,22 @@ import {
   Create as CreateIcon,
 } from '@mui/icons-material';
 
-interface NavItemProps {
+interface NavItem {
   path: string;
   text: string;
   icon: React.ReactElement;
 }
 
-export default function NavList() {
-  const navItems: NavItemProps[] = [
+interface NavItemProps extends NavItem {
+  onSelect: () => void;
+}
+
+interface NavListProps {
+  onSelect: () => void;
+}
+
+export default function NavList({ onSelect }: NavListProps) {
+  const navItems: NavItem[] = [
     {
       path: '/',
       text: 'Dashboard',
@@ -46,18 +54,18 @@ export default function NavList() {
   return (
     <List>
       {navItems.map((item) => (
-        <NavItem key={item.path} {...item} />
+        <NavItem key={item.path} {...item} onSelect={onSelect} />
       ))}
     </List>
   );
 }
 
-function NavItem({ icon, text, path }: NavItemProps) {
+function NavItem({ icon, text, path, onSelect }: NavItemProps) {
   const { pathname } = useLocation();
   const isActive = path === pathname;
 
   return (
-    <ListItemButton component={RouterLink} to={path} selected={isActive}>
+    <ListItemButton component={RouterLink} to={path} selected={isActive} onClick={onSelect}>
       <ListItemIcon>
         <Icon color={isActive ? 'primary' : undefined}>{icon}</Icon>
       </ListItemIcon>

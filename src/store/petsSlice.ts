@@ -26,12 +26,8 @@ const petsSlice = createSlice({
       localStorage.setItem('pet_id', String(state.selectedId));
     },
     updatePet: (state, { payload: pet }: PayloadAction<Pet>) => {
-      const pets = state.pets;
-      const targetPetIndex = pets.findIndex((p) => p.id === pet.id);
-      if (targetPetIndex > 0) {
-        pets[targetPetIndex] = pet;
-        state = Object.assign(state, { ...state, pets });
-      }
+      const pets = state.pets.map((p) => (p.id === pet.id ? pet : p));
+      state = Object.assign(state, { ...state, pets });
     },
     // resetPet: (state) => {
     //   state = Object.assign(state, { ...initialState });
